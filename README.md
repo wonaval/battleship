@@ -5,7 +5,7 @@ My project will the board game Battleship. I chose this project so I can work mo
 
 ## Game Rules:
 
-The game board consists of a 10 x 10 grid. Each player has <#> number of ships of varying length. They may place their ships any where on the grid in either a vertical or horizontal oritentation.
+The game board consists of a 10 x 10 grid. Each player has 4 number of ships of varying length. They may place their ships any where on the grid in either a vertical or horizontal oritentation.
 
 The first player will start by picking a square on the gird not previously chosen and call out their selection. The other player will confirm whether or not square contains a part of their placed ships which will be displayed with a white circle (miss) or a red circle (hit).
 
@@ -21,6 +21,7 @@ When I click on one of the ships, I will able to click on the grid and a directi
 
 
 ## MVP Checklist:
+- [ ] Enter player name
 - [ ] Generate 10x10 board
 - [ ] Placement of ships
 - [ ] Grid is clickable and confirms hit/miss
@@ -28,11 +29,5 @@ When I click on one of the ships, I will able to click on the grid and a directi
 
 
 ## Stretch Goals:
-- [ ] Enter player name
-- [ ] Variable amount of ships
 - [ ] Allow 2nd player
-- [ ] Variable game board size
-- [ ] Varying degrees of CPU AI
 - [ ] Allow n-shots to be taken per turn
-- [ ] Shot patterns (+, X, O)
-- [ ] Real-time timer
