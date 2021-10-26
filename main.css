@@ -1,0 +1,64 @@
+/*
+#040F0F - black
+#FFFFF0 - white
+#BEBFC4 - silver
+#183C28 - green
+#EEC643 - gold
+#FF4242 - red
+#95D2EC - blue
+*/
+body {
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 1280px;
+    height: 720px;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #040F0F;
+    color: #FFFFF0;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+header {
+    display: block;
+    width: 100%;
+
+    text-align: center;
+}
+
+main {
+    display: block;
+}
+
+
+.grid {
+    display: grid;
+
+    grid-template-columns: repeat(10, 1fr);
+    margin: 10px;
+
+    gap: 1px;
+}
+
+.grid > div {
+    background: url(assets/ocean.gif) 0px 96px;
+
+    border-radius: 5px;
+    width: 32px;
+    height: 32px;
+}
+
+.grid > div:hover {
+    opacity: .5;
+}
+
+footer {
+    display: block;
+    width: 100%;
+
+    text-align: center;
+}
