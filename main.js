@@ -2,19 +2,36 @@ console.log("js loaded");
 
 // MODEL
 
-class Ship {
-    constructor (length) {
-        this.length = length;
-        
-    }
-};
-
 
 
 // VIEW
 const gridEls = Array.from(document.querySelectorAll('.grid > div > div'));
-const playerBoard = new Array(100).fill(0);
-const cpuBoard =  new Array(100).fill(0);
+const playerBoard = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+const cpuBoard = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+
+console.log(gridEls, playerBoard, cpuBoard);
 
 gridEls.forEach((square)=> {
     square.addEventListener('click', (evt) => squareHandle(evt))
@@ -25,31 +42,40 @@ function squareHandle (evt) {
     
 }
 
-random(10);
 // CONTROLLER
+
+random(10);
+
 function random (amount) {
     while (amount > 0) {
-    let random = Math.floor(Math.random() * 100);
-    console.log(random);
-    if (playerBoard[random] === 0) {
-        playerBoard[random] = 1
-        amount--;
-    }
+        let x = Math.floor(Math.random() * 10);
+        let y = Math.floor(Math.random() * 10);
+        console.log(x, y);
+        console.log(playerBoard[x][y]);
+        if (playerBoard[x][y] === 0) {
+            playerBoard[x][y] = 1;
+            amount--;
+        } else {
+            console.log("Square already placed!")
+        }
+        console.log(playerBoard)
     }
 }
 
 
 
-// console.log(gridEls, playerBoard, cpuBoard);
-
 render();
 
 function render () {
-    playerBoard.forEach((square, idx) => {
-        // console.log(square, idx)
-        if (square === 1) {
-            // console.log(gridEls[idx])
-            gridEls[idx].style.background = "#737373"
-        }
-    })
+    playerBoard.forEach((row, idx) => {
+        console.log(playerBoard[idx]);
+        playerBoard[idx].forEach((col, idy) => {
+            if (playerBoard[idx][idy] === 1) {
+                let index = `${(idx*10) + idy}`;
+                console.log(index)
+                console.log(gridEls[index])
+                gridEls[index].style.backgroundColor = "#737373";
+            }
+        });
+    });
 }
