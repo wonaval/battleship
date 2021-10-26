@@ -19,19 +19,21 @@ body {
 
     background: #040F0F;
     color: #FFFFF0;
-    border: 1px solid white;
+    border: 1px solid #BEBFC4;
     border-radius: 5px;
+
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 header {
-    display: block;
     width: 100%;
+    height: 40px;
 
     text-align: center;
 }
 
 main {
-    display: block;
+    
 }
 
 
@@ -39,21 +41,32 @@ main {
     display: grid;
 
     grid-template-columns: repeat(10, 1fr);
-    margin: 10px;
 
     gap: 1px;
+    
+    border: 1px solid rgb(45, 45, 45);
+    border-radius: 10px;
+
 }
 
-.grid > div {
-    background: url(assets/ocean.gif) 0px 96px;
+.grid > div > div {
+    /* background: url(assets/ocean.gif) 0 32px; */
+    
+    background-color: grey;
+    color: black;
 
-    border-radius: 5px;
-    width: 32px;
-    height: 32px;
+    border-radius: 10px;
+
+    width: 50px;
+    height: 50px;
 }
 
-.grid > div:hover {
-    opacity: .5;
+.grid > div > div:hover {
+    opacity: .75;
+}
+
+.one > div {
+    background: white;
 }
 
 footer {
