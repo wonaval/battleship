@@ -2,8 +2,12 @@ console.log("js loaded");
 
 // MODEL
 
-
-
+class Ship {
+    constructor (length) {
+        this.length = length;
+        
+    }
+};
 
 
 
@@ -13,11 +17,12 @@ const playerBoard = new Array(100).fill(0);
 const cpuBoard =  new Array(100).fill(0);
 
 gridEls.forEach((square)=> {
-    square.addEventListener('click', (evt) => test(event))
+    square.addEventListener('click', (evt) => squareHandle(evt))
 });
 
-function test (evt) {
+function squareHandle (evt) {
     console.log(evt.target)
+    
 }
 
 random(10);
@@ -35,16 +40,16 @@ function random (amount) {
 
 
 
-console.log(gridEls, playerBoard, cpuBoard);
+// console.log(gridEls, playerBoard, cpuBoard);
 
 render();
 
 function render () {
     playerBoard.forEach((square, idx) => {
-        console.log(square, idx)
+        // console.log(square, idx)
         if (square === 1) {
-            console.log(gridEls[idx])
-            gridEls[idx].style.background = "#FFFFFF"
+            // console.log(gridEls[idx])
+            gridEls[idx].style.background = "#737373"
         }
     })
 }
