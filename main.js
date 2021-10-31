@@ -1,6 +1,9 @@
 const gridEls = Array.from(document.querySelectorAll('.grid > div > div'));
 const statusText = document.querySelector("#status_text");
-const columns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+const columnString = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+const north = document.querySelector("#up");
+const south = document.querySelector("#down");
+
 
 let compBoard = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -60,28 +63,39 @@ function placeCarrier () {
     statusText.innerText = "Select start location for your carrier on the grid..."
 
     gridEls.forEach((square) => {
-        square.addEventListener('click', (evt) => squareHandle(evt))
+        square.addEventListener('click', (evt) => squareHandle(evt, length))
     });
 }
 
-function squareHandle (evt) {
+
+
+function squareHandle (evt, length) {
     let eventID = evt.target.getAttribute("id");
+    console.log(length)
     console.log(eventID, typeof(eventID));
     let element = parseInt(eventID.slice(1, 3));
-    let y = eventID.charAt(1);
-    let x = eventID.charAt(2);
+    let y = parseInt(eventID.charAt(1));
+    let x = parseInt(eventID.charAt(2));
     let squareValue = checkBoard[x][y];
-    console.log(x, y, squareValue, element)
+    console.log("length >>", length, "X >>", x, "Y >>", y, squareValue, element)
 
-    verifyStart(x, y);
+    verifyStart(x, y, length);
 
 }
 
-function verifyStart (x, y) {
+function colToString (y) {
+    return columnString[y];
+}
+
+function verifyStart (x, y, length) {
     if (checkBoard[x][y] === 0) {
         checkBoard[x][y] = 1;
+        console.log(checkBoard);
+
+        console.log(colToString(x), y+1, "square selected")
+        verifyDirection(x, y, length)
     } else {
-        statusText.innerText = "Square already selected. Please select another square."
+        statusText.innerText = "Square occupied. Please select another square."
     }
 }
 
@@ -114,7 +128,7 @@ function pickSquare(length) {
 }
 
 function verifyDirection (y, x, length) {
-    console.log(x, y)
+    console.log("X >>", x, "| Y >>", y)
     let north = 0;
     let south = 0;
     let east = 0;
@@ -148,25 +162,25 @@ function verifyDirection (y, x, length) {
         westObs = checkWest(x, y);
     }
 
-    console.log("N", northObs, "S", southObs, "E", eastObs, "W", westObs)
+    console.log("Length", length, "N", northObs, "S", southObs, "E", eastObs, "W", westObs)
 
     if (northObs >= length) {
-        console.log("North Confirm")
+        console.log("North available")
         north = 1;
     }
 
     if (southObs >= length) {
-        console.log("South Confirm")
+        console.log("South available")
         south = 1;
     }
 
     if (eastObs >= length) {
-        console.log("East Confirm")
+        console.log("East available")
         east = 1;
     }
     
     if (westObs >= length) {
-        console.log("West Confirm")
+        console.log("West available")
         west = 1;
     }
 
@@ -186,9 +200,11 @@ function checkNorth (x, y) {
                 northCount++;
                 console.log(northCount);
             } else {
+                console.log(northCount);
                 return northCount;
             }
         } else {
+            console.log(northCount);
             return northCount;
         }
     }
@@ -200,16 +216,18 @@ function checkSouth (x, y) {
     let current;
     let southCount = 1;
 
-    for (i = 1; i < 5; i++) {
-        if (y+i <= 9) {
-            current = checkBoard[x][y+i];
+    for (j = 1; j < 5; j++) {
+        if (y+j <= 9) {
+            current = checkBoard[x][y+j];
             if (current === 0) {
                 southCount++;
                 console.log(southCount);
             } else {
+                console.log(southCount);
                 return southCount;
             }
         } else {
+            console.log(southCount);
             return southCount;
         }
     }
@@ -220,7 +238,6 @@ function checkEast (x, y) {
     console.log("East")
     let current;
     let eastCount = 1;
-
     for (i = 1; i < 5; i++) {
         if (x+i <= 9) {
             current = checkBoard[x+i][y];
@@ -228,9 +245,11 @@ function checkEast (x, y) {
                 eastCount++;
                 console.log(eastCount);
             } else {
+                console.log(eastCount);
                 return eastCount;
             }
         } else {
+            console.log(eastCount);
             return eastCount;
         }
     }
@@ -249,9 +268,11 @@ function checkWest (x, y) {
                 westCount++;
                 console.log(westCount);
             } else {
+                console.log(westCount);
                 return westCount;
             }
         } else {
+            console.log(westCount);
             return westCount;
         }
     }
