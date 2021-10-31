@@ -1,8 +1,33 @@
-const gridEls = Array.from(document.querySelectorAll('.grid > div > div'));
-const statusText = document.querySelector("#status_text");
 const columnString = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+const gridElsTop = Array.from(document.querySelectorAll(".grid > div > div"));
+const gridElsBot = Array.from(document.querySelectorAll(".grid_bottom > div > div"));
+const intro = document.querySelector("header");
+const main_top = document.querySelector(".one");
+const main_bottom = document.querySelector(".two");
+const statusText = document.querySelector("#status_text");
+const statusBottom = document.querySelector("#status_text_bottom");
 const north = document.querySelector("#up");
 const south = document.querySelector("#down");
+
+initialize();
+
+function initialize () {
+    intro.style.display = "block";
+    // main_top.style.display = "none";
+    main_bottom.style.display = "none";
+    win_box.style.display = "none";
+}
+
+
+north.addEventListener("click", function () {
+    main_top.style.display = "none";
+    main_bottom.style.display ="block";
+});
+
+south.addEventListener("click", function () {
+    console.log("NORTH")
+    main_bottom.style.display ="block";
+});
 
 
 let compBoard = [
@@ -60,9 +85,9 @@ function placePlayer () {
 function placeCarrier () {
     let length = 5;
 
-    statusText.innerText = "Select start location for your carrier on the grid..."
+    statusText.innerText = "Select start location for your carrier on the OCEAN GRID..."
 
-    gridEls.forEach((square) => {
+    gridElsTop.forEach((square) => {
         square.addEventListener('click', (evt) => squareHandle(evt, length))
     });
 }
@@ -299,12 +324,12 @@ function pickDirection (n, s, e, w) {
 function checkHit () {
     if (squareValue <= 1) {
         if (squareValue === 1) {
-            gridEls[element].style.backgroundColor = "red";
-            gridEls[element].innerText = "X";
+            gridElsTop[element].style.backgroundColor = "red";
+            gridElsTop[element].innerText = "X";
             compBoard[y][x] += 2;
         } else {
-            gridEls[element].style.backgroundColor = "white";
-            gridEls[element].innerText = "O";
+            gridElsTop[element].style.backgroundColor = "white";
+            gridElsTop[element].innerText = "O";
             compBoard[y][x] += 2;
         }
     } else {
@@ -321,9 +346,9 @@ function render () {
             if (compBoard[idx][idy] === 1) {
                 let index = `${(idy*10) + idx}`;
                 console.log(index);
-                console.log(gridEls[index]);
-                gridEls[index].style.backgroundColor = "#737373";
-                gridEls[index].innerText = test;
+                console.log(gridElsTop[index]);
+                gridElsTop[index].style.backgroundColor = "#737373";
+                gridElsTop[index].innerText = test;
                 test++;
             }
         });

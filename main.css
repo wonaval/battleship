@@ -11,15 +11,14 @@ body {
     display: flex;
     flex-wrap: wrap;
 
-    width: 1280px;
-    height: 720px;
+    width: 1024px;
+    height: 768px;
 
     align-items: center;
     justify-content: center;
 
     background: #040F0F;
     color: #FFFFF0;
-    border: 1px solid #BEBFC4;
     border-radius: 5px;
 
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -32,8 +31,20 @@ header {
     text-align: center;
 }
 
-.main_top {
+#ocean, #target {
+    width: 100%;
+    height: 50px;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-end;
+}
+
+
+.main_top, .main_bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
 }
 
 .label_horz {
@@ -95,6 +106,30 @@ header {
 }
 
 .grid > div > div:hover {
+    opacity: .75;
+}
+
+.grid_bottom {
+    display: grid;
+
+    grid-template-columns: repeat(10, 1fr);
+    
+    border: 1px solid white;
+    border-radius: 5px;
+
+}
+
+.grid_bottom > div > div {
+    background: url(assets/Ocean_SpriteSheet.png);
+    background-size: 128px;
+    background-color: grey;
+    color: black;
+
+    width: 48px;
+    height: 48px;
+}
+
+.grid_bottom > div > div:hover {
     opacity: .75;
 }
 
@@ -163,5 +198,21 @@ footer {
 }
 
 #up:hover, #down:hover, #left:hover, #right:hover {
-    opacity: 0.75;
+    background: grey;
+}
+
+#status_text_bottom {
+    padding: 10px;
+    width: 300px;
+    height: 456px;
+    border: 1px solid white;
+    margin: 1px;
+    border-radius: 5px;
+}
+
+#winbox {
+    margin: 10px 0;
+    border: 1px solid white;
+    height: 100px;
+
 }
