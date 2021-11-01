@@ -17,8 +17,6 @@ When I click on one of the ships, I will able to click on the grid and a directi
 One all ships are placed, I should be able to click on another grid to make guesses and be shown another grid for the computer's guesses.
 When either I or the computer reaches zero ships left, the outcome screen is shown.
 
-
-
 ## MVP Checklist:
 - [x] Enter player name
 - [x] Generate 10x10 board
@@ -30,3 +28,6 @@ When either I or the computer reaches zero ships left, the outcome screen is sho
 ## Stretch Goals:
 - [ ] Allow 2nd player
 - [ ] Allow n-shots to be taken per turn
+
+## Summary:
+The game is coded with HTML, CSS, and JavaScript. The code is fairly straight forward. I wish I thought to use classes earlier in the project but I wasn't able to find time to refactor my code to accomodate it. The most interesting code to write was the square validation functions that helped determine whether you can place a ship on a certain space in a certain direction. MDN and W3Schools were a HUGE help in finding correct syntax.
