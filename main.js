@@ -85,7 +85,7 @@ let checkBoard = [
 function placePlayer () {
     // Carrier, Battleship, Submarine, Destroyer
     
-    statusText.innerText = "Select start location for your carrier on the OCEAN GRID."
+    statusText.innerText = "Select start location for your CARRIER (5) on the OCEAN GRID."
 }
 
 function squareHandle (evt) {
@@ -95,8 +95,8 @@ function squareHandle (evt) {
     console.log(eventID, typeof(eventID));
     console.log("ship >>", ship, "length >> ", length)
     let element = parseInt(eventID.slice(1, 3));
-    let y = parseInt(eventID.charAt(1));
-    let x = parseInt(eventID.charAt(2));
+    y = parseInt(eventID.charAt(1));
+    x = parseInt(eventID.charAt(2));
     console.log("length >>", length, "X >>", x, "Y >>", y, element)
     switch (placeTurn) {
         case 0:
@@ -119,6 +119,9 @@ function squareHandle (evt) {
             length = 2;
             ship = "destroyer";
             break;
+        default:
+            console.log("TEST");
+            break;
     }
         
     verifyStart();
@@ -136,27 +139,18 @@ function verifyStart () {
         checkBoard[x][y] = ship;
         console.log(checkBoard);
 
-        statusText.innerText = `${colToString(y)} ${x+1} selected. Please select from available directions below.`;
-        gridElsTop.forEach((square) => {
+        if (playerPlaced === false) {
+            statusText.innerText = `${colToString(y)} ${x+1} selected. Please select from available directions below.`;
+            gridElsTop.forEach((square) => {
             square.removeEventListener('click', inputListener);
-        })
-        render();
-        placeTurn = -1;
+            render();
+            placeTurn = -1;
+        })};
         verifyDirection();
 
     } else {
-        statusText.innerText = "Square occupied. Please select another square."
+        if (playerPlaced === false) {statusText.innerText = "Square occupied. Please select another square."}
     }
-}
-
-function placeComp() {
-    let x = Math.floor(Math.random() * 10);
-    let y = Math.floor(Math.random() * 10);
-
-    console.log(checkBoard);
-    pickSquare();
-    let pick = verifyDirection();
-    console.log(pick);
 }
 
 function verifyDirection () {
@@ -228,6 +222,8 @@ function verifyDirection () {
 
     if (playerPlaced === false) {
         renderDirections();
+    } else {
+        randomDirection();
     }
 
 }
@@ -236,56 +232,90 @@ function renderDirections() {
     console.log(direction)
     if (direction[0] === 1) {
         north.style.visibility = "visible";
-        north.addEventListener("click", function () {
-            placeShipNorth()
-        })
+        north.addEventListener("click", placeShipNorth);
     }    
     if (direction[1] === 1) {
         south.style.visibility = "visible";
-        south.addEventListener("click", function () {
-            placeShipSouth()
-        })
+        south.addEventListener("click", placeShipSouth);
     }
     if (direction[2] === 1) {
         east.style.visibility = "visible";
-        east.addEventListener("click", function () {
-            placeShipEast()
-        })
+        east.addEventListener("click", placeShipEast);
     }
     if (direction[3] === 1) {
         west.style.visibility = "visible";
-        west.addEventListener("click", function () {
-            placeShipWest()
-        })
+        west.addEventListener("click", placeShipWest);
+    }
+}
+
+function randomDirection () {
+    console.log(direction);
+    let notPlaced = 0;
+    while (notPlaced === 0) {
+        let index = Math.floor(Math.random() * 4);
+        if (direction[index] === 1) {
+            switch (index) {
+                case 0:
+                    placeShipNorth;
+                    break;
+                case 1:
+                    placeShipSouth;
+                    break;
+                case 2:
+                    placeShipEast;
+                    break;
+                case 3:
+                    placeShipWest;
+                    break;
+                default:
+                    break;
+            }
+            notPlaced++;
+        }
     }
 }
 
 function removeDirection() {
     if (direction[0] === 1) {
+        north.removeEventListener("click", placeShipNorth);
         north.style.visibility = "hidden";
+        
     }    
     if (direction[1] === 1) {
+        south.removeEventListener("click", placeShipSouth);
         south.style.visibility = "hidden";
     }
     if (direction[2] === 1) {
+        east.removeEventListener("click", placeShipEast);
         east.style.visibility = "hidden";
     }
     if (direction[3] === 1) {
+        west.removeEventListener("click", placeShipWest);
         west.style.visibility = "hidden";
     }
 
     switch (length) {
         case 5:
             placeTurn = 1;
+            statusText.innerText = "Select start location for your BATTLESHIP (4) on the OCEAN GRID."
             break;
         case 4:
             placeTurn = 2;
+            statusText.innerText = "Select start location for your SUBMARINE (3) on the OCEAN GRID."
             break;
         case 3:
             placeTurn = 3;
+            statusText.innerText = "Select start location for your DESTROYER (2) on the OCEAN GRID."
             break;
         case 2:
             placeTurn = 4;
+            playerPlaced = true;
+            statusText.innerText = "Computer opponent is now placing ships..."
+            playerBoard = checkBoard;
+            placeComp();
+            break;
+        default:
+            console.log("TEST");
             break;
     }
 }
@@ -293,41 +323,45 @@ function removeDirection() {
 function placeShipNorth() {
     console.log("PLACE NORTH", x, y, length, ship)
     for (i = 1; i < length; i++) {
-        checkBoard[y-i][x] = ship;
+        checkBoard[x-i][y] = ship;
     }
-    console.log(checkBoard)
-    removeDirection();
+    if (playerPlaced === false) {
     render();
+    removeDirection();
+    }
 }
 
 function placeShipSouth() {
-    console.log("PLACE South", x, y, length, ship)
+    console.log("PLACE SOUTH", x, y, length, ship)
     for (i = 1; i < length; i++) {
-        checkBoard[y+i][x] = ship;
+        checkBoard[x+i][y] = ship;
     }
-    console.log(checkBoard)
-    removeDirection();
+    if (playerPlaced === false) {
     render();
+    removeDirection();
+    }
 }
 
 function placeShipEast() {
-    console.log("PLACE East", x, y, length, ship)
+    console.log("PLACE EAST", x, y, length, ship)
     for (i = 1; i < length; i++) {
-        checkBoard[y][x+i] = ship;
+        checkBoard[x][y+i] = ship;
     }
-    console.log(checkBoard)
-    removeDirection();
+    if (playerPlaced === false) {
     render();
+    removeDirection();
+    }
 }
 
 function placeShipWest() {
-    console.log("PLACE West", x, y, length, ship)
+    console.log("PLACE WEST", x, y, length, ship)
     for (i = 1; i < length; i++) {
-        checkBoard[y][x-i] = ship;
+        checkBoard[x][y-i] = ship;
     }
-    console.log(checkBoard)
-    removeDirection();
+    if (playerPlaced === false) {
     render();
+    removeDirection();
+    }
 }
 
 
@@ -337,8 +371,8 @@ function checkNorth () {
     let northCount = 1;
 
     for (i = 1; i < 5; i++) {
-        if (y-i >= 0) {
-            current = checkBoard[x][y-i];
+        if (x-i >= 0) {
+            current = checkBoard[x-i][y];
             if (current === 0) {
                 northCount++;
                 //console.log(northCount);
@@ -360,8 +394,8 @@ function checkSouth () {
     let southCount = 1;
 
     for (i = 1; i < 5; i++) {
-        if (y+i <= 9) {
-            current = checkBoard[x][y+i];
+        if (x+i <= 9) {
+            current = checkBoard[x+i][y];
             if (current === 0) {
                 southCount++;
                 //console.log(southCount);
@@ -382,8 +416,8 @@ function checkEast () {
     let current;
     let eastCount = 1;
     for (i = 1; i < 5; i++) {
-        if (x+i <= 9) {
-            current = checkBoard[x+i][y];
+        if (y+i <= 9) {
+            current = checkBoard[x][y+i];
             if (current === 0) {
                 eastCount++;
                 //console.log(eastCount);
@@ -405,8 +439,8 @@ function checkWest () {
     let westCount = 1;
 
     for (i = 1; i < 5; i++) {
-        if (x-i >= 0) {
-            current = checkBoard[x-i][y];
+        if (y-i >= 0) {
+            current = checkBoard[x][y-i];
             if (current === 0) {
                 westCount++;
                 //console.log(westCount);
@@ -422,6 +456,8 @@ function checkWest () {
     return westCount;
 }
 
+
+// RENDER MAP
 function render () {
     let test = 0;
     checkBoard.forEach((row, idx) => {
@@ -444,4 +480,49 @@ function render () {
             }
         });
     });
+}
+
+function placeComp() {
+    for(rows in checkBoard) {
+        checkBoard[rows].fill(0, 0, 10)
+    }
+    while (placeTurn <= 7) {
+        console.log(placeTurn)
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+
+        setCompPlace();
+        verifyStart();
+
+        placeTurn++;
+    }
+
+    console.log(checkBoard);
+}
+
+function setCompPlace () {
+    switch (placeTurn) {
+        case 4:
+            console.log("Comp placing carrier...")
+            ship = "carrier";
+            length = 5;
+            break;
+        case 5:
+            console.log("Comp placing battleship...")
+            ship = "battleship";
+            length = 4;
+            break;
+        case 6:
+            console.log("Comp placing submarine...")
+            ship = "submarine";
+            length = 3;
+            break;
+        case 7:
+            console.log("Comp placing destroyer...")
+            ship = "destroyer";
+            break;
+        default:
+            console.log("ERROR");
+            break;
+    }
 }
