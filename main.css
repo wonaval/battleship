@@ -13,17 +13,26 @@ header {
     flex-wrap: wrap;
     justify-content: center;
     align-content: space-around;
-    width: 1024px;
-    height: 768px;
+    width: 1280px;
+    height: 720px;
+
+}
+
+.one, .two {
+    display: flex;
+    flex-wrap: wrap;
+    
+    justify-content: center;
 
 }
 
 body {
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
 
-    width: 1024px;
-    height: 768px;
+    width: 1280px;
+    height: 720px;
 
     align-items: center;
     justify-content: center;
@@ -31,7 +40,6 @@ body {
     background: #040F0F;
     color: #FFFFF0;
     border-radius: 5px;
-
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -43,7 +51,7 @@ body {
 }
 
 #ocean, #target {
-    width: 1024px;
+    width: 1280px;
     padding: 10px 0;
     display: flex;
     flex-wrap: wrap;
@@ -57,7 +65,12 @@ body {
 .main_top, .main_bottom {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;;
     align-content: center;
+}
+
+#blank {
+    width: 300px;
 }
 
 .label_horz {

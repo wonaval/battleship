@@ -256,21 +256,27 @@ function randomDirection () {
         if (direction[index] === 1) {
             switch (index) {
                 case 0:
-                    placeShipNorth;
+                    console.log("Comp picked North")
+                    placeShipNorth();
                     break;
                 case 1:
-                    placeShipSouth;
+                    placeShipSouth();
+                    console.log("Comp picked South")
                     break;
                 case 2:
-                    placeShipEast;
+                    placeShipEast();
+                    console.log("Comp picked East")
                     break;
                 case 3:
-                    placeShipWest;
+                    placeShipWest();
+                    console.log("Comp picked West")
                     break;
                 default:
                     break;
             }
             notPlaced++;
+        } else {
+            console.log("Not available.")
         }
     }
 }
@@ -320,7 +326,7 @@ function removeDirection() {
     }
 }
 
-function placeShipNorth() {
+function placeShipNorth () {
     console.log("PLACE NORTH", x, y, length, ship)
     for (i = 1; i < length; i++) {
         checkBoard[x-i][y] = ship;
@@ -331,7 +337,7 @@ function placeShipNorth() {
     }
 }
 
-function placeShipSouth() {
+function placeShipSouth () {
     console.log("PLACE SOUTH", x, y, length, ship)
     for (i = 1; i < length; i++) {
         checkBoard[x+i][y] = ship;
@@ -342,7 +348,7 @@ function placeShipSouth() {
     }
 }
 
-function placeShipEast() {
+function placeShipEast () {
     console.log("PLACE EAST", x, y, length, ship)
     for (i = 1; i < length; i++) {
         checkBoard[x][y+i] = ship;
@@ -353,7 +359,7 @@ function placeShipEast() {
     }
 }
 
-function placeShipWest() {
+function placeShipWest () {
     console.log("PLACE WEST", x, y, length, ship)
     for (i = 1; i < length; i++) {
         checkBoard[x][y-i] = ship;
@@ -498,6 +504,10 @@ function placeComp() {
     }
 
     console.log(checkBoard);
+    console.log(placeTurn)
+    setCompPlace();
+    console.log("PLAYER >>", playerBoard);
+    console.log("COMP >>", compBoard);
 }
 
 function setCompPlace () {
@@ -521,8 +531,16 @@ function setCompPlace () {
             console.log("Comp placing destroyer...")
             ship = "destroyer";
             break;
+        case 8:
+            statusText.innerText = "Computer placement complete!"
+            placeTurn = -1;
+            main_bottom.style.display = "flex";
+            statusBottom.innerText = "Please select your first guess on TARGET GRID!"
+            compBoard = checkBoard;
+            break;
         default:
             console.log("ERROR");
             break;
     }
+    console.log(ship)
 }
