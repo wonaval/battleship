@@ -24,10 +24,10 @@ When either I or the computer reaches zero ships left, the outcome screen is sho
 
 ## MVP Checklist:
 - [ ] Enter player name
-- [ ] Generate 10x10 board
-- [ ] Placement of ships
-- [ ] Grid is clickable and confirms hit/miss
-- [ ] Win condition when one player has no ships left
+- [x] Generate 10x10 board
+- [x] Placement of ships
+- [x] Grid is clickable and confirms hit/miss
+- [x] Win condition when one player has no ships left
 
 
 ## Stretch Goals:
