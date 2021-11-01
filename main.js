@@ -12,10 +12,10 @@ const south = document.querySelector("#down");
 initialize();
 
 function initialize () {
-    intro.style.display = "block";
-    // main_top.style.display = "none";
-    main_bottom.style.display = "none";
-    win_box.style.display = "none";
+    intro.style.display = "none";
+    main_top.style.display = "none";
+    // main_bottom.style.display = "none";
+    // win_box.style.display = "none";
 }
 
 
