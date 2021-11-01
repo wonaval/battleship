@@ -10,24 +10,67 @@ const north = document.querySelector("#up");
 const south = document.querySelector("#down");
 const east = document.querySelector("#right");
 const west = document.querySelector("#left");
-const win_box = document.querySelector("footer");
+const win_box = document.querySelector(".win");
+const winMsg = document.querySelector("#win_box")
 const enter_name = document.querySelector("#enter_name");
-const reset = document.querySelector("button")
+const reset = document.querySelector("#reset")
 
+let playerShips = {};
+let compShips = {};
 let direction = [];
+let playerBoard = [];
+let compBoard = [];
+let checkBoard = [];
 let placeTurn = 0;
 let length;
 let ship;
 let x;
 let y;
-let playerShips = {};
-let compShip = {};
 let playerName;
 let playerPlaced;
 
 initialize();
 
 function initialize () {
+    playerBoard = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    
+    compBoard = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+    
+    checkBoard = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]
+
     showIntro();
 
     enter_name.addEventListener("submit", (e) => {
@@ -46,14 +89,13 @@ function initialize () {
     west.style.visibility = "hidden";
 
     playerPlaced = false;
-    placePlayer();
 }
 
 function showIntro () {
     intro.style.display = "flex";
     main_top.style.display = "none";
     main_bottom.style.display = "none"
-    win_box.style.display = "none";
+    win_box.style.visibility = "hidden";
 }
 
 function showMain() {
@@ -61,56 +103,17 @@ function showMain() {
     main_top.style.display = "flex";
     main_bottom.style.display = "flex"
 
+    placePlayer();
     gridElsTop.forEach((square) => {
         square.addEventListener('click', (evt) => squareHandle(evt))
     });
 
 }
 
-let playerBoard = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
 
-let compBoard = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
-
-let checkBoard = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
 
 // Player
 function placePlayer () {
-    // Carrier, Battleship, Submarine, Destroyer
-    console.log()
-
     statusText.innerText = `Hello ${playerName}! Select start location for your CARRIER (5) on the OCEAN GRID.`
 }
 
@@ -783,9 +786,9 @@ function checkOutcome () {
     console.log("PLAYER LEFT >>", playerTotal, "COMP LEFT >>", compTotal);
 
     if (playerTotal === "Sunk!Sunk!Sunk!Sunk!") {
-        winString = "THE COMPUTER WINS!"
+        winString = "The Computer wins!"
     } else if (compTotal === "Sunk!Sunk!Sunk!Sunk!") {
-        winString = "YOU WIN!"
+        winString = `${playerName} wins!`
         showOutcome(winString);
     }
 }
@@ -793,6 +796,11 @@ function checkOutcome () {
 function showOutcome (winString) {
     main_top.style.display = "none";
     main_bottom.style.display = "none";
-    win_box.style.display = "block";
-    win_box.innerText = winString;
+    win_box.style.visibility = "visible";
+    reset.style.visibility = "visible";
+    winMsg.innerText = winString;
+
+    reset.addEventListener("click", (e) => {
+        location.reload();
+    });
 }
