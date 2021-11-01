@@ -18,6 +18,8 @@ let length;
 let ship;
 let x;
 let y;
+let playerShips = {};
+let compShip = {};
 
 
 let playerPlaced;
@@ -26,8 +28,6 @@ initialize();
 
 function initialize () {
     intro.style.display = "none";
-    // main_top.style.display = "none";
-    main_bottom.style.display = "none";
     win_box.style.display = "none";
 
     north.style.visibility = "hidden";
@@ -89,15 +89,11 @@ function placePlayer () {
 }
 
 function squareHandle (evt) {
-    console.log('click')
     if (placeTurn >= 0) {
     let eventID = evt.target.getAttribute("id");
-    console.log(eventID, typeof(eventID));
-    console.log("ship >>", ship, "length >> ", length)
-    let element = parseInt(eventID.slice(1, 3));
     y = parseInt(eventID.charAt(1));
     x = parseInt(eventID.charAt(2));
-    console.log("length >>", length, "X >>", x, "Y >>", y, element)
+    console.log("length >>", length, "X >>", x, "Y >>", y)
     switch (placeTurn) {
         case 0:
             console.log("place carrier")
@@ -164,25 +160,25 @@ function verifyDirection () {
     let eastObs = 1;
     let westObs = 1;
 
-    if (y === 0) {
+    if (x === 0) {
         northObs = 0;
     } else {
         northObs = checkNorth();
     }
 
-    if (y === 9) {
+    if (x === 9) {
         southObs = 0;
     } else {
         southObs = checkSouth();
     }
     
-    if (x === 9) {
+    if (y === 9) {
         eastObs = 0;
     } else {
         eastObs = checkEast();
     }
     
-    if (x === 0) {
+    if (y === 0) {
         westObs = 0;
     } else {
         westObs = checkWest();
@@ -250,8 +246,8 @@ function renderDirections() {
 
 function randomDirection () {
     console.log(direction);
-    let notPlaced = 0;
-    while (notPlaced === 0) {
+    let notPlaced = true;
+    while (notPlaced === true) {
         let index = Math.floor(Math.random() * 4);
         if (direction[index] === 1) {
             switch (index) {
@@ -274,9 +270,10 @@ function randomDirection () {
                 default:
                     break;
             }
-            notPlaced++;
+            notPlaced = false;
         } else {
-            console.log("Not available.")
+            console.log(direction);
+            console.log("Not available.");
         }
     }
 }
@@ -492,15 +489,14 @@ function placeComp() {
     for(rows in checkBoard) {
         checkBoard[rows].fill(0, 0, 10)
     }
-    while (placeTurn <= 7) {
+
+    while (placeTurn !== 8) {
         console.log(placeTurn)
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
 
         setCompPlace();
         verifyStart();
-
-        placeTurn++;
     }
 
     console.log(checkBoard);
@@ -508,6 +504,8 @@ function placeComp() {
     setCompPlace();
     console.log("PLAYER >>", playerBoard);
     console.log("COMP >>", compBoard);
+
+    startGame();
 }
 
 function setCompPlace () {
@@ -516,25 +514,29 @@ function setCompPlace () {
             console.log("Comp placing carrier...")
             ship = "carrier";
             length = 5;
+            placeTurn = 5;
             break;
         case 5:
             console.log("Comp placing battleship...")
             ship = "battleship";
             length = 4;
+            placeTurn = 6;
             break;
         case 6:
             console.log("Comp placing submarine...")
             ship = "submarine";
             length = 3;
+            placeTurn = 7;
             break;
         case 7:
             console.log("Comp placing destroyer...")
             ship = "destroyer";
+            length = 2;
+            placeTurn = 8;
             break;
         case 8:
             statusText.innerText = "Computer placement complete!"
             placeTurn = -1;
-            main_bottom.style.display = "flex";
             statusBottom.innerText = "Please select your first guess on TARGET GRID!"
             compBoard = checkBoard;
             break;
@@ -543,4 +545,120 @@ function setCompPlace () {
             break;
     }
     console.log(ship)
+}
+
+function startGame () {
+    playerShips = {
+        carrier: 5,
+        battleship: 4,
+        submarine: 3,
+        destroyer: 2
+    }
+
+    compShips = {
+        carrier: 5,
+        battleship: 4,
+        submarine: 3,
+        destroyer: 2
+    }
+
+    console.log(playerShips)
+    console.log(compShips)
+    gridElsBot.forEach((square) => {
+        square.addEventListener('click', (event) => {
+            let getID = event.target.getAttribute("id");
+            x = parseInt(getID.charAt(2));
+            y = parseInt(getID.charAt(1));
+            checkHit();
+        });
+    });
+}
+
+function checkHit () {
+    console.log("getHit")
+    console.log("X >>", y, "Y >>", x);
+    compareHit();
+}
+
+function compareHit () {
+    let hitString= "";
+    console.log(compBoard[x][y])
+    if (compBoard[x][y] === 0) {
+        compBoard[x][y] = "miss"
+        hitString = `${colToString(y)} ${x+1} selected. Miss!`
+    } else if (compBoard[x][y] === "hit" | compBoard[x][y] === "miss") {
+        hitString = `${colToString(y)} ${x+1} selected. Square selected previously. Please select another square.`
+    } else {
+        hitString = `${colToString(y)} ${x+1} selected. ${compBoard[x][y].charAt(0).toUpperCase() + compBoard[x][y].slice(1)} hit!`
+        removeShip(compBoard[x][y])
+        compBoard[x][y] = "hit"
+    }
+    renderBottom(hitString);
+}
+
+function removeShip (remove) {
+    compShips[remove]--;
+}
+
+function renderBottom (hitString) {
+    let cheat = false;
+        compBoard.forEach((row, idx) => {
+            compBoard[idx].forEach((col, idy) => {
+                if (compBoard[idx][idy] === "hit") {
+                    let index = `${(idy*10) + idx}`;
+                    gridElsBot[index].style.background= "red";
+                } else if (compBoard[idx][idy] === "miss") {
+                    let index = `${(idy*10) + idx}`;
+                    gridElsBot[index].style.background= "white";
+                }
+            });
+        });
+    if (cheat) {
+    }
+    renderMsg(hitString)
+
+    computerSelect();
+}
+
+function computerSelect () {
+    x = Math.floor(Math.random() * 10);
+    y = Math.floor(Math.random() * 10);
+
+    if (playerBoard[x][y] === 0) {
+
+    } else if (playerBoard[x][y]) {
+
+    }
+
+    renderTop();
+}
+
+function renderTop () {
+
+}
+
+function renderMsg (hitString) {
+    for (let item in compShips) {
+        if (compShips[item] === 0) {
+            compShips[item] = "Sunk!"
+        }
+    }
+
+    let compCarrier = `Carrier: ${compShips.carrier}`;
+    let compBattleship = `Battleship: ${compShips.battleship}`;
+    let compSubmarine = `Submarine: ${compShips.submarine}`;
+    let compDestroyer = `Destroyer: ${compShips.destroyer}`;
+    console.log("COMP |", compCarrier, compBattleship, compSubmarine, compDestroyer)
+    finalString = hitString + "\n" + "\n" + "Computer ships left:" + "\n" + compCarrier + "\n" + compBattleship + "\n" + compSubmarine + "\n" + compDestroyer;
+    statusBottom.innerText = finalString;
+
+    let playerCarrier = `Carrier: ${playerShips.carrier}`
+    let playerBattleship = `Battleship: ${playerShips.battleship}`
+    let playerSubmarine = `Submarine: ${playerShips.submarine}`
+    let playerDestroyer = `Destroyer: ${playerShips.destroyer}`
+
+    playerFinalString = "Player ships left:" + "\n" + compCarrier + "\n" + compBattleship + "\n" + compSubmarine + "\n" + compDestroyer;
+    statusText.innerText = playerFinalString;
+
+    checkOutcome();
 }
