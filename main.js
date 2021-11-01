@@ -8,27 +8,40 @@ const statusText = document.querySelector("#status_text");
 const statusBottom = document.querySelector("#status_text_bottom");
 const north = document.querySelector("#up");
 const south = document.querySelector("#down");
+const east = document.querySelector("#right");
+const west = document.querySelector("#left");
+
+
+let direction = [];
+let placeTurn = 0;
+let length;
+let ship;
+let x;
+let y;
+
+
+let playerPlaced;
 
 initialize();
 
 function initialize () {
     intro.style.display = "none";
-    main_top.style.display = "none";
-    // main_bottom.style.display = "none";
-    // win_box.style.display = "none";
+    // main_top.style.display = "none";
+    main_bottom.style.display = "none";
+    win_box.style.display = "none";
+
+    north.style.visibility = "hidden";
+    south.style.visibility = "hidden";
+    east.style.visibility = "hidden";
+    west.style.visibility = "hidden";
+
+    gridElsTop.forEach((square) => {
+        square.addEventListener('click', (evt) => squareHandle(evt))
+    });
+
+    playerPlaced = false;
+    placePlayer();
 }
-
-
-north.addEventListener("click", function () {
-    main_top.style.display = "none";
-    main_bottom.style.display ="block";
-});
-
-south.addEventListener("click", function () {
-    console.log("NORTH")
-    main_bottom.style.display ="block";
-});
-
 
 let compBoard = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -68,91 +81,85 @@ let checkBoard = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
-
-
-placePlayer();
-
 // Player
 function placePlayer () {
     // Carrier, Battleship, Submarine, Destroyer
     
-    placeCarrier();
-    // placeBattleship();
-    // placeSubmarine();
-    // placeDestroyer();
+    statusText.innerText = "Select start location for your carrier on the OCEAN GRID."
 }
 
-function placeCarrier () {
-    let length = 5;
-
-    statusText.innerText = "Select start location for your carrier on the OCEAN GRID..."
-
-    gridElsTop.forEach((square) => {
-        square.addEventListener('click', (evt) => squareHandle(evt, length))
-    });
-}
-
-
-
-function squareHandle (evt, length) {
+function squareHandle (evt) {
+    console.log('click')
+    if (placeTurn >= 0) {
     let eventID = evt.target.getAttribute("id");
-    console.log(length)
     console.log(eventID, typeof(eventID));
+    console.log("ship >>", ship, "length >> ", length)
     let element = parseInt(eventID.slice(1, 3));
     let y = parseInt(eventID.charAt(1));
     let x = parseInt(eventID.charAt(2));
-    let squareValue = checkBoard[x][y];
-    console.log("length >>", length, "X >>", x, "Y >>", y, squareValue, element)
-
-    verifyStart(x, y, length);
-
+    console.log("length >>", length, "X >>", x, "Y >>", y, element)
+    switch (placeTurn) {
+        case 0:
+            console.log("place carrier")
+            length = 5;
+            ship = "carrier";
+            break;
+        case 1:
+            console.log("place battle")
+            length = 4;
+            ship = "battleship";
+            break;
+        case 2:
+            console.log("place sub")
+            length = 3;
+            ship = "submarine";
+            break;
+        case 3:
+            console.log("place destroy")
+            length = 2;
+            ship = "destroyer";
+            break;
+    }
+        
+    verifyStart();
+    }
 }
+
+const inputListener = (event, length) => {squareHandle(event, length)};
 
 function colToString (y) {
     return columnString[y];
 }
 
-function verifyStart (x, y, length) {
+function verifyStart () {
     if (checkBoard[x][y] === 0) {
-        checkBoard[x][y] = 1;
+        checkBoard[x][y] = ship;
         console.log(checkBoard);
 
-        console.log(colToString(x), y+1, "square selected")
-        verifyDirection(x, y, length)
+        statusText.innerText = `${colToString(y)} ${x+1} selected. Please select from available directions below.`;
+        gridElsTop.forEach((square) => {
+            square.removeEventListener('click', inputListener);
+        })
+        render();
+        placeTurn = -1;
+        verifyDirection();
+
     } else {
         statusText.innerText = "Square occupied. Please select another square."
     }
 }
 
-// placeComp(5);
-// render();
-
-
-// Computer
-function placeComp(length) {
+function placeComp() {
     let x = Math.floor(Math.random() * 10);
     let y = Math.floor(Math.random() * 10);
 
     console.log(checkBoard);
-    pickSquare(length);
+    pickSquare();
     let pick = verifyDirection();
     console.log(pick);
 }
 
-function pickSquare(length) {
-    let placed = 0;
-    while (placed === 0) {
-        if (checkBoard[x][y] === 0) {
-            checkBoard[x][y] = 1;
-            verifyDirection(x, y, length);
-            placed--;
-        } else {
-            console.log("Square already placed!")
-        }
-    }
-}
-
-function verifyDirection (y, x, length) {
+function verifyDirection () {
     console.log("X >>", x, "| Y >>", y)
     let north = 0;
     let south = 0;
@@ -166,25 +173,25 @@ function verifyDirection (y, x, length) {
     if (y === 0) {
         northObs = 0;
     } else {
-        northObs = checkNorth(x, y);
+        northObs = checkNorth();
     }
 
     if (y === 9) {
         southObs = 0;
     } else {
-        southObs = checkSouth(x, y);
+        southObs = checkSouth();
     }
     
     if (x === 9) {
         eastObs = 0;
     } else {
-        eastObs = checkEast(x, y);
+        eastObs = checkEast();
     }
     
     if (x === 0) {
         westObs = 0;
     } else {
-        westObs = checkWest(x, y);
+        westObs = checkWest();
     }
 
     console.log("Length", length, "N", northObs, "S", southObs, "E", eastObs, "W", westObs)
@@ -192,75 +199,186 @@ function verifyDirection (y, x, length) {
     if (northObs >= length) {
         console.log("North available")
         north = 1;
+    } else {
+        north = 0;
     }
 
     if (southObs >= length) {
         console.log("South available")
         south = 1;
+    } else {
+        south = 0;
     }
 
     if (eastObs >= length) {
         console.log("East available")
         east = 1;
+    } else {
+        east = 0;
     }
     
     if (westObs >= length) {
         console.log("West available")
         west = 1;
+    } else {
+        west = 0;
     }
 
-    let direction = [north, south, east, west];
-    return direction;
+    direction = [north, south, east, west];
+
+    if (playerPlaced === false) {
+        renderDirections();
+    }
+
 }
 
-function checkNorth (x, y) {
+function renderDirections() {
+    console.log(direction)
+    if (direction[0] === 1) {
+        north.style.visibility = "visible";
+        north.addEventListener("click", function () {
+            placeShipNorth()
+        })
+    }    
+    if (direction[1] === 1) {
+        south.style.visibility = "visible";
+        south.addEventListener("click", function () {
+            placeShipSouth()
+        })
+    }
+    if (direction[2] === 1) {
+        east.style.visibility = "visible";
+        east.addEventListener("click", function () {
+            placeShipEast()
+        })
+    }
+    if (direction[3] === 1) {
+        west.style.visibility = "visible";
+        west.addEventListener("click", function () {
+            placeShipWest()
+        })
+    }
+}
+
+function removeDirection() {
+    if (direction[0] === 1) {
+        north.style.visibility = "hidden";
+    }    
+    if (direction[1] === 1) {
+        south.style.visibility = "hidden";
+    }
+    if (direction[2] === 1) {
+        east.style.visibility = "hidden";
+    }
+    if (direction[3] === 1) {
+        west.style.visibility = "hidden";
+    }
+
+    switch (length) {
+        case 5:
+            placeTurn = 1;
+            break;
+        case 4:
+            placeTurn = 2;
+            break;
+        case 3:
+            placeTurn = 3;
+            break;
+        case 2:
+            placeTurn = 4;
+            break;
+    }
+}
+
+function placeShipNorth() {
+    console.log("PLACE NORTH", x, y, length, ship)
+    for (i = 1; i < length; i++) {
+        checkBoard[y-i][x] = ship;
+    }
+    console.log(checkBoard)
+    removeDirection();
+    render();
+}
+
+function placeShipSouth() {
+    console.log("PLACE South", x, y, length, ship)
+    for (i = 1; i < length; i++) {
+        checkBoard[y+i][x] = ship;
+    }
+    console.log(checkBoard)
+    removeDirection();
+    render();
+}
+
+function placeShipEast() {
+    console.log("PLACE East", x, y, length, ship)
+    for (i = 1; i < length; i++) {
+        checkBoard[y][x+i] = ship;
+    }
+    console.log(checkBoard)
+    removeDirection();
+    render();
+}
+
+function placeShipWest() {
+    console.log("PLACE West", x, y, length, ship)
+    for (i = 1; i < length; i++) {
+        checkBoard[y][x-i] = ship;
+    }
+    console.log(checkBoard)
+    removeDirection();
+    render();
+}
+
+
+function checkNorth () {
     console.log("North")
     let current;
     let northCount = 1;
 
     for (i = 1; i < 5; i++) {
         if (y-i >= 0) {
-            current = checkBoard[x][y-1];
+            current = checkBoard[x][y-i];
             if (current === 0) {
                 northCount++;
-                console.log(northCount);
+                //console.log(northCount);
             } else {
-                console.log(northCount);
+                //console.log(northCount);
                 return northCount;
             }
         } else {
-            console.log(northCount);
+            //console.log(northCount);
             return northCount;
         }
     }
     return northCount;
 }
 
-function checkSouth (x, y) {
-    console.log("South")
+function checkSouth () {
+    //console.log("South")
     let current;
     let southCount = 1;
 
-    for (j = 1; j < 5; j++) {
-        if (y+j <= 9) {
-            current = checkBoard[x][y+j];
+    for (i = 1; i < 5; i++) {
+        if (y+i <= 9) {
+            current = checkBoard[x][y+i];
             if (current === 0) {
                 southCount++;
-                console.log(southCount);
+                //console.log(southCount);
             } else {
-                console.log(southCount);
+                //console.log(southCount);
                 return southCount;
             }
         } else {
-            console.log(southCount);
+            //console.log(southCount);
             return southCount;
         }
     }
     return southCount;
 }
 
-function checkEast (x, y) {
-    console.log("East")
+function checkEast () {
+    //console.log("East")
     let current;
     let eastCount = 1;
     for (i = 1; i < 5; i++) {
@@ -268,21 +386,21 @@ function checkEast (x, y) {
             current = checkBoard[x+i][y];
             if (current === 0) {
                 eastCount++;
-                console.log(eastCount);
+                //console.log(eastCount);
             } else {
-                console.log(eastCount);
+                //console.log(eastCount);
                 return eastCount;
             }
         } else {
-            console.log(eastCount);
+            //console.log(eastCount);
             return eastCount;
         }
     }
     return eastCount;
 }
 
-function checkWest (x, y) {
-    console.log("West")
+function checkWest () {
+    // console.log("West")
     let current;
     let westCount = 1;
 
@@ -291,65 +409,38 @@ function checkWest (x, y) {
             current = checkBoard[x-i][y];
             if (current === 0) {
                 westCount++;
-                console.log(westCount);
+                //console.log(westCount);
             } else {
-                console.log(westCount);
+                //console.log(westCount);
                 return westCount;
             }
         } else {
-            console.log(westCount);
+            //console.log(westCount);
             return westCount;
         }
     }
     return westCount;
 }
 
-function pickDirection (n, s, e, w) {
-    let direction = [n, s, e, w];
-    let picked = 0;
-    console.log(direction);
-    while (picked === 0) {
-        let randDir = Math.floor(Math.random() * 4);
-        console.log(direction[randDir])
-        if (direction[randDir] === 1) {
-            picked++;
-            console.log(randDir)
-        } else {
-            console.log("Not available");
-        }
-    }
-    
-}
-
-function checkHit () {
-    if (squareValue <= 1) {
-        if (squareValue === 1) {
-            gridElsTop[element].style.backgroundColor = "red";
-            gridElsTop[element].innerText = "X";
-            compBoard[y][x] += 2;
-        } else {
-            gridElsTop[element].style.backgroundColor = "white";
-            gridElsTop[element].innerText = "O";
-            compBoard[y][x] += 2;
-        }
-    } else {
-        console.log(`Square ${eventID} already selected!`)
-    }
-}
-
 function render () {
     let test = 0;
-    compBoard = checkBoard;
-    compBoard.forEach((row, idx) => {
-        // console.log(compBoard[idx]);
-        compBoard[idx].forEach((col, idy) => {
-            if (compBoard[idx][idy] === 1) {
+    checkBoard.forEach((row, idx) => {
+        checkBoard[idx].forEach((col, idy) => {
+            if (checkBoard[idx][idy] === "carrier") {
                 let index = `${(idy*10) + idx}`;
-                console.log(index);
-                console.log(gridElsTop[index]);
-                gridElsTop[index].style.backgroundColor = "#737373";
-                gridElsTop[index].innerText = test;
-                test++;
+                gridElsTop[index].style.background= "#EEC643";
+            }
+            if (checkBoard[idx][idy] === "battleship") {
+                let index = `${(idy*10) + idx}`;
+                gridElsTop[index].style.background= "#95D2EC";
+            }
+            if (checkBoard[idx][idy] === "submarine") {
+                let index = `${(idy*10) + idx}`;
+                gridElsTop[index].style.background= "#183C28";
+            }
+            if (checkBoard[idx][idy] === "destroyer") {
+                let index = `${(idy*10) + idx}`;
+                gridElsTop[index].style.background= "#FF4242";
             }
         });
     });
