@@ -5,25 +5,22 @@ My project will the board game Battleship. I chose this project so I can work mo
 
 ## Game Rules:
 
-The game board consists of a 10 x 10 grid. Each player has 4 number of ships of varying length. They may place their ships any where on the grid in either a vertical or horizontal oritentation.
-
-The first player will start by picking a square on the gird not previously chosen and call out their selection. The other player will confirm whether or not square contains a part of their placed ships which will be displayed with a white circle (miss) or a red circle (hit).
-
-Each player will take turns and the player who manages to guess the placement of all of the other player's ships is the winner.
+The player starts on a 10x10 grid and places 4 ships on the Ocean Grid by selecting the starting square on the grid then selecting a cardinal direction. The computer randomly selects placement of its ships. The player goes first and guesses a square on the target grid. If the computer has a ship there, a hit will be confirmed. If not, a miss is registered. The player and computer take turns until either the player or computer does not have any ships left and the outcome screen shows the winner.
 
 ## Wireframes:
 
-![wireframe](assets/battleship_wireframe.png)
+![wireframe](assets/new_wireframe.png)
 
 ## User stories:
 When the page loads a 10x10 grid will show
 When I click on one of the ships, I will able to click on the grid and a direction to place down each ship
-When either I or the computer reaches zero ships left, the outcome screen is show.
+One all ships are placed, I should be able to click on another grid to make guesses and be shown another grid for the computer's guesses.
+When either I or the computer reaches zero ships left, the outcome screen is shown.
 
 
 
 ## MVP Checklist:
-- [ ] Enter player name
+- [x] Enter player name
 - [x] Generate 10x10 board
 - [x] Placement of ships
 - [x] Grid is clickable and confirms hit/miss
