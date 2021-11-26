@@ -10,21 +10,24 @@
 </head>
 <body>
     <header>
-        <div id="logo">battleship</div>
-        <div class="form">
-            <form id="enter_name">
-                <div>enter your name...</div>
-                <input type="text" name="name">
-                <input type="submit" value="submit"/>
-            </form>
+        <div class='topWrap'>
+            <div id='title'>battleship</div>
         </div>
     </header>
 
     <main>
+        <div class='introPage'>
+            <form id="enterName">
+                <label for="name">Please enter your name</label>
+                <input type="text" name="name">
+                <input type="submit" value="Start Game" class='button'>
+            </form>
+        </div>
+
         <!-- TOP -->
         <div class="one">
             <div class="main_top">
-                <div id="ocean">battleship</br></br>OCEAN GRID</div>
+                <div id="ocean">OCEAN GRID</div>
                 <div class="label_horz">
                     <div></div>
                     <div>A</div>
@@ -189,6 +192,7 @@
                 </div>
             </div>
         </div>
+
         <!--- BOTTOM -->
         <div class="two">
             <div class="main_bottom">
@@ -349,12 +353,15 @@
                 </div>
             </div>
         </div>
-    </main>
-    <footer>
+
         <div class="win">
             <div id="win_box">WIN SCREEN</div>
-            <button id="reset">Play again!</button>
+            <button id="reset" class='button'>Play again!</button>
         </div>
+    </main>
+
+    <footer>
+        <div id='tagline'>battleship 2021 - wonaval</div>
     </footer>
 </body>
 </html>

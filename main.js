@@ -1,7 +1,7 @@
 const columnString = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 const gridElsTop = Array.from(document.querySelectorAll(".grid > div > div"));
 const gridElsBot = Array.from(document.querySelectorAll(".grid_bottom > div > div"));
-const intro = document.querySelector("header");
+const intro = document.querySelector(".introPage");
 const main_top = document.querySelector(".one");
 const main_bottom = document.querySelector(".two");
 const statusText = document.querySelector("#status_text");
@@ -12,7 +12,7 @@ const east = document.querySelector("#right");
 const west = document.querySelector("#left");
 const win_box = document.querySelector(".win");
 const winMsg = document.querySelector("#win_box")
-const enter_name = document.querySelector("#enter_name");
+const enterName = document.querySelector("#enterName");
 const reset = document.querySelector("#reset")
 
 let playerShips = {};
@@ -73,7 +73,7 @@ function initialize () {
 
     showIntro();
 
-    enter_name.addEventListener("submit", (e) => {
+    enterName.addEventListener("submit", (e) => {
         e.preventDefault();
         const formData = e.target.elements;
         playerName = formData.name.value;
@@ -153,7 +153,7 @@ function squareHandle (evt) {
     }
 }
 
-const inputListener = (event, length) => {squareHandle(event, length)};
+const inputListener = (event, length) => { squareHandle(event, length) };
 
 function colToString (y) {
     return columnString[y];
