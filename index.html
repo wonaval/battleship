@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>battleship</title>
     <link rel="stylesheet" href="main.css">
-    <script src="main.js" defer></script>
 </head>
 <body>
     <header>
@@ -18,16 +17,16 @@
     <main>
         <div class='introPage'>
             <form id="enterName">
-                <label for="name">Please enter your name</label>
-                <input type="text" name="name">
+                <label for="name">Please enter your name</label><br/>
+                <input type="text" name="name"><br/>
                 <input type="submit" value="Start Game" class='button'>
             </form>
         </div>
 
         <!-- TOP -->
         <div class="one">
+            <div id="ocean">OCEAN GRID</div>
             <div class="main_top">
-                <div id="ocean">OCEAN GRID</div>
                 <div class="label_horz">
                     <div></div>
                     <div>A</div>
@@ -195,8 +194,8 @@
 
         <!--- BOTTOM -->
         <div class="two">
+            <div id="target">TARGET GRID</div>
             <div class="main_bottom">
-                <div id="target">TARGET GRID</div>
                 <div class="label_horz">
                     <div></div>
                     <div>A</div>
@@ -355,7 +354,7 @@
         </div>
 
         <div class="win">
-            <div id="win_box">WIN SCREEN</div>
+            <div id="win_box"></div>
             <button id="reset" class='button'>Play again!</button>
         </div>
     </main>
@@ -363,5 +362,7 @@
     <footer>
         <div id='tagline'>battleship 2021 - wonaval</div>
     </footer>
+    
+    <script src="main.js" defer></script>
 </body>
 </html>

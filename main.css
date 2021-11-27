@@ -19,7 +19,9 @@ body {
     background: #040F0F;
     color: #FFFFF0;
     border-radius: 5px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
 }
 
 header {
@@ -34,15 +36,22 @@ header {
 }
 
 main {
-    width: 720px;
+    width: 900px;
     min-height: 720px;
 
-    border: 1px solid white;
+    background: rgba(61, 61, 61, 0.75);
+    border: 1px solid #EEC643;
     border-radius: 5px;
 
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+
+    
+    background: url('background.png');
+    background-repeat: no-repeat;
+    background-position: 50% 95%;
 }
 
 .introPage {
@@ -56,30 +65,27 @@ main {
 }
 
 .one, .two {
+    margin: 0 0 15px 0;
+
     display: flex;
     flex-wrap: wrap;
     
-    justify-content: center;
+    justify-content: flex-start;
     align-content: flex-start;
-
 }
 
 #ocean, #target {
-    width: 1280px;
-    padding: 10px 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: flex-start;
-    align-items: flex-start;
+    width: 100%;
+    padding: 25px 0 10px 0;
     text-align: center;
-}
 
+    color: #EEC643;
+}
 
 .main_top, .main_bottom {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;;
+    flex-direction: column;
+    justify-content: flex-start;
     align-content: flex-start;
 }
 
@@ -97,7 +103,6 @@ main {
     align-items: center;
     justify-content: center;
 
-    background-color: #040F0F;
     color: white;
 
     width: 48px;
@@ -115,67 +120,39 @@ main {
 
 .label_vert > div {
     display: flex;
-    align-items: center;
-    justify-content: center;
 
-    background-color: #040F0F;
     color: white;
 
     width: 48px;
     height: 48px;
 }
 
-.grid {
+.grid, .grid_bottom {
     display: grid;
+    justify-items: center;
+    align-items: center;
 
     grid-template-columns: repeat(10, 1fr);
     
     border: 1px solid white;
     border-radius: 5px;
-
+    font-size: 50px;
 }
 
-.grid > div > div {
+.grid > div > div, .grid_bottom > div > div {
     background: url(assets/Ocean_SpriteSheet.png);
     background-size: 128px;
-    background-color: grey;
     color: black;
 
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
 
     width: 48px;
     height: 48px;
 }
 
-.grid > div > div:hover {
-    opacity: .75;
-}
-
-.grid_bottom {
-    display: grid;
-
-    grid-template-columns: repeat(10, 1fr);
-    
-    border: 1px solid white;
-    border-radius: 5px;
-
-}
-
-.grid_bottom > div > div {
-    background: url(assets/Ocean_SpriteSheet.png);
-    background-size: 128px;
-    background-color: grey;
-    color: black;
-
-    width: 48px;
-    height: 48px;
-    
-}
-
-.grid_bottom > div > div:hover {
+.grid > div > div:hover, .grid_bottom > div > div:hover {
     opacity: .75;
 }
 
@@ -256,10 +233,9 @@ footer {
     border-radius: 5px;
 }
 
-#winbox {
-    margin: 10px 0;
-    border: 1px solid white;
-    height: 100px;
+.win {
+    display: flex;
+    flex-direction: column;
 
 }
 
@@ -274,4 +250,5 @@ footer {
 footer {
     font-size: 10px;
     color: #EEC643;
+    margin: 10px 0 0 0;
 }
