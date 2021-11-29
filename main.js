@@ -17,6 +17,8 @@ const reset = document.querySelector("#reset")
 
 let playerShips = {};
 let compShips = {};
+let plyTotalShips = 14;
+let cpuTotalShips = 14;
 let direction = [];
 let playerBoard = [];
 let compBoard = [];
@@ -605,6 +607,7 @@ function compareHit () {
 }
 
 function removeShip (remove) {
+    cpuTotalShips--;
     compShips[remove]--;
 }
 
@@ -660,6 +663,7 @@ function computerSelect () {
 }
 
 function removePlayerShip (remove) {
+    plyTotalShips--;
     playerShips[remove]--;
 }
 
@@ -720,12 +724,13 @@ function renderBotMsg (hitString) {
 
 function checkOutcome () {
     let winString;
-    let playerTotal = playerShips.carrier + playerShips.battleship + playerShips.submarine + playerShips.destroyer;
-    let compTotal = compShips.carrier + compShips.battleship + compShips.submarine + compShips.destroyer;
+    // let playerTotal = playerShips.carrier + playerShips.battleship + playerShips.submarine + playerShips.destroyer;
+    // let compTotal = compShips.carrier + compShips.battleship + compShips.submarine + compShips.destroyer;
 
-    if (playerTotal === "Sunk!Sunk!Sunk!Sunk!") {
+    if (plyTotalShips === 0) {
         winString = "The Computer wins!"
-    } else if (compTotal === "Sunk!Sunk!Sunk!Sunk!") {
+        showOutcome(winString);
+    } else if (cpuTotalShips === 0) {
         winString = `${playerName} wins!`
         showOutcome(winString);
     }
