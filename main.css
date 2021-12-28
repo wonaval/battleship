@@ -100,7 +100,7 @@ main {
   grid-template-columns: repeat(11, 1fr);
 }
 
-.label_horz > div {
+.label_horz div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,8 +120,10 @@ main {
   display: flex;
 }
 
-.label_vert > div {
+.label_vert div {
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   color: white;
 
