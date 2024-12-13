@@ -3,7 +3,7 @@
 Deployed at https://wonaval.github.io/battleship/
 
 ## Overview:
-My project will the board game Battleship. I chose this project so I can work more on grid CSS, generate simple CPU AI, and A LOT of DOM minipulation.
+My project will be the board game Battleship. I chose this project so I can work more on grid CSS, generate simple CPU AI, and A LOT of DOM minipulation.
 
 ## Game Rules:
 
